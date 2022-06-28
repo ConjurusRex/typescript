@@ -106,6 +106,6 @@
   //   "node_modules"                                    /* excluded by default
   // ]
   "include": [
-    "./2config/app.ts"
+    "./3es6/app.ts"
   ]
 }
