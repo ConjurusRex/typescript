@@ -1,12 +1,18 @@
 // ---------------------------------------------------> class Department
+// abstract classes cannot be instantiated -> new Department(...)
 abstract class Department {
   protected employees: string[] = [];
   static year: number = 2022;
+  // you can also have abstract properties
 
   constructor(protected readonly id: string, private name: string) {}
 
+  // an abstract method can only be defined inside an abstract class
+  // methods can be overridden without being abstract -> abstract enforces that every class it is extended by requires an implementation
   abstract describe(): void;
-  
+  // describe() {
+  //   console.log(`Department: (ID)${this.id} -> ${this.name}`);
+  // }
 
   static createEmployee(name: string) {
     return { name: name };
@@ -38,22 +44,10 @@ class IT extends Department {
 // ---------------------------------------------------> class Accounting
 class Accounting extends Department {
   private lastReport: string;
-  private static instance: Accounting;
 
-  // allows for one instance of the accounting class (Singleton)
-  private constructor(id: string, public reports: string[]) {
+  constructor(id: string, public reports: string[]) {
     super(id, 'accounting');
     this.lastReport = reports[0];
-  }
-
-  // how to instantiate singleton instance
-  static getInstance() {
-    // same as using Accounting.instance
-    if (this.instance) {
-      return this.instance;
-    }
-    this.instance = new Accounting('acct', []);
-    return this.instance;
   }
 
   get theLastReport() {
@@ -90,8 +84,5 @@ class Accounting extends Department {
   }
 }
 
-// const accounting = new Accounting('acct', ['classified', 'important', 'fees', 'expenses']);
-// declaration of accounting object instance (singleton)
-const accounting = Accounting.getInstance();
-// const accounting2 = Accounting.getInstance(); -> this returns the exact same instance of the class as accounting
-accounting.describe();
+const accting = new Accounting('acct', ['classified', 'important', 'fees', 'expenses']);
+accting.describe();
