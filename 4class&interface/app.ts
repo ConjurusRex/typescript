@@ -1,97 +1,53 @@
-// ---------------------------------------------------> class Department
-abstract class Department {
-  protected employees: string[] = [];
-  static year: number = 2022;
+// type function
+// type AddFN = (a: number, b: number) => number;
 
-  constructor(protected readonly id: string, private name: string) {}
+// let add: AddFN;
+// add = (a: number, b: number) => { return a + b; }
 
-  abstract describe(): void;
+
+// interface function
+interface AddFN {
+  (a: number, b: number): number;
+}
+let add: AddFN;
+add = (a: number, b: number) => { return a + b; }
+
+
+interface Named {
+  // readonly can be used in type as well
+  readonly name?: string;
+  // optional property
+  outputName?: string;
+}
+
+
+interface Greetable extends Named {
+  // greet?(phrase: string): void; -> optional method
+  greet(phrase: string): void;
+}
+
+
+class Person implements Greetable { // or -> implements Greetable, Named
+  age = 30;
   
-
-  static createEmployee(name: string) {
-    return { name: name };
-  }
-
-  addEmployee(employee: string) {
-    this.employees.push(employee);
-  }
-
-  printEmployeeInfo() {
-    console.log('num of employees: ' + this.employees.length);
-    console.log('employees: ' + this.employees);
-  }
-}
-
-
-// ---------------------------------------------------> class IT
-class IT extends Department {
-  constructor(id: string, public admins: string[]) {
-    super(id, 'information technology');
-  }
-
-  describe(): void {
-    console.log(`${this.id} is the ID for the information technology department`);
-  }
-}
-
-
-// ---------------------------------------------------> class Accounting
-class Accounting extends Department {
-  private lastReport: string;
-  private static instance: Accounting;
-
-  // allows for one instance of the accounting class (Singleton)
-  private constructor(id: string, public reports: string[]) {
-    super(id, 'accounting');
-    this.lastReport = reports[0];
-  }
-
-  // how to instantiate singleton instance
-  static getInstance() {
-    // same as using Accounting.instance
-    if (this.instance) {
-      return this.instance;
-    }
-    this.instance = new Accounting('acct', []);
-    return this.instance;
-  }
-
-  get theLastReport() {
-    if (this.lastReport) {
-      return this.lastReport;
+  constructor(public name?: string) { // public name: string = 'user' -> you can assign a default value without ?
+    if (name) {
+      this.name = name;
     } else {
-      throw new Error('get theLastReport() - no report was found');
+      this.name = 'person'
     }
-  }
-
-  set theLastReport(value: string) {
-    if (!value) {
-      throw new Error('set theLastReport() - please pass a valid value');
-    }
-    this.addReport(value);
-  }
-
-  describe(): void {
-    console.log(`${this.id} is the ID for the accounting department`);
-  }
-
-  addEmployee(employee: string): void {
-    console.log('employee was added: ' + employee);
-    this.employees.push(employee);
-  }
-
-  addReport(text: string) {
-    this.reports.push(text);
-    this.lastReport = text;
-  }
-
-  printReports() {
-    console.log(this.reports);
+  } // public name?: string -> can have optional properties in classes
+  
+  greet(phrase: string) {
+    console.log(phrase + ' ' + this.name);
   }
 }
 
-// const accounting = new Accounting('acct', ['classified', 'important', 'fees', 'expenses']);
-// declaration of accounting object instance (singleton)
-const accounting = Accounting.getInstance();
-// const accounting2 = Accounting.getInstance(); -> this returns the exact same instance of the class as accounting
-accounting.describe();
+
+let user: Greetable;
+user = new Person('josh');
+user.greet('Hi there,');
+console.log(user);
+
+let user2 = new Person();
+user2.greet('Hi there,');
