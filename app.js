@@ -1,36 +1,17 @@
 "use strict";
-let employee = {
-    name: 'josh',
-    privileges: ['read', 'write', 'delete'],
+const move = (animal) => {
+    let speed;
+    // typescript will infer the available type properties
+    switch (animal.type) {
+        case 'bird':
+            speed = animal.flyingSpeed;
+            break;
+        case 'horse':
+            speed = animal.runningSpeed;
+            break;
+    }
+    console.log('moving speed: ' + speed);
 };
-const printEmployeeInfo = (emp) => {
-    console.log('Name: ' + emp.name);
-    // another example of type checking -> prop in obj
-    if ('privileges' in emp) {
-        return console.log('Privileges: ' + emp.privileges);
-    }
-};
-printEmployeeInfo(employee);
-class Footman {
-    attack() {
-        console.log('swing attack!');
-    }
-}
-class Priest {
-    attack() {
-        console.log('spell attack!');
-    }
-    heal() {
-        console.log('casting healing spell for ' + (((Math.random()) * 2) * 10).toFixed(0) + 'hp!');
-    }
-}
-const footman = new Footman();
-const priest = new Priest();
-const attack = (unit) => {
-    unit.attack();
-    // another example of type checking -> obj of class (instanceof does not work with interfaces)
-    if (unit instanceof Priest) {
-        unit.heal();
-    }
-};
-// type checks available in javascript -> typeof, in, instanceof
+// typescript will infer the available type properties
+move({ type: 'bird', flyingSpeed: 20 });
+move({ type: 'horse', runningSpeed: 30 });
