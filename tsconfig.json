@@ -106,6 +106,6 @@
   //   "node_modules"                                    /* excluded by default
   // ]
   "include": [
-    "5advancedtypes/app.ts"
+    "6generics/app.ts"
   ]
 }
