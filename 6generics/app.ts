@@ -1,34 +1,37 @@
-// Array<string> generic type
-const names: Array<string> = []; // same as -> string[]
+interface Person {
+  name: string
+}
 
-// Promise<string> generic type
-const promise: Promise<string> = new Promise((resolve, reject) => {
-  setTimeout(() => {
-    resolve('promise has resolved');
-  }, 2000);
-});
-
-promise.then(data => {
-  data.trim(); // because we let typescript know the promise will return a string we get auto completion string options here
-});
-
-
-// function merge(objA: object, objB: object) {
-//   return Object.assign(objA, objB);
-// }
-
-// const obj = merge({ name: 'josh' }, { age: 31 }); // as { name: string, age: number } -> long work around
-// obj.name; -> throws an error because TS doesn't know obj will have these props
-
-// custom generic type -> T stands for type, U is next in alpabet
-function merge<T, U>(objA: T, objB: U) { // merge : T & U -> intersection
+// constraints
+// union types, interfaces, or custom types are valid constraints as well -> constraining one generic type is also valid
+function merge<T extends Person, U extends object>(objA: T, objB: U) { 
   return Object.assign(objA, objB);
 }
 
-const obj = merge({ name: 'josh' }, { age: 31 }); // TS now knows the obj returned will have both props
+//const obj = merge({ name: 'josh' }, 30); -> will throw an error when constraints are specified
+const obj = merge({ name: 'josh' }, { age: 31 });
 obj.age;
 obj.name;
 
-// can provide TS with more info about generic types -> this example is redundant
-const obj2 = merge<{ name: string, age: number }, { hobbies: string[] }>({ name: 'rex', age: 91 }, { hobbies: ['spells', 'knowledge'] });
+
+interface Lengthy {
+  length: number;
+}
+
+// generic function with interface constraint
+// return type is a tuple -> first ele is of type T, second ele is of type string
+// Lengthy tells TS to only care that the element argument has a length property
+function countAndDescribe<T extends Lengthy>(element: T): [T, string] {
+  let description = 'missing value';
+  if (element.length === 1) {
+    description = 'got 1 element';
+  } else if (element.length > 1) {
+    description = 'got ' + element.length + ' elements';
+  }
+  return [element, description];
+}
+
+console.log(countAndDescribe('hello world')); // returns: Array [ "hello world", "got 11 elements" ]
+console.log(countAndDescribe(['yam', 'fish', 'broccoli'])); // returns: Array [ (3) […], "got 3 elements" ]
+console.log(countAndDescribe([])); // returns: Array [ [], "missing value" ]
 
