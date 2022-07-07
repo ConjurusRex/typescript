@@ -35,3 +35,9 @@ console.log(countAndDescribe('hello world')); // returns: Array [ "hello world",
 console.log(countAndDescribe(['yam', 'fish', 'broccoli'])); // returns: Array [ (3) […], "got 3 elements" ]
 console.log(countAndDescribe([])); // returns: Array [ [], "missing value" ]
 
+
+function extractAndConvert<T extends object, U extends keyof T>(obj: T, key: U) {
+  return 'Value: ' + obj[key];
+}
+
+extractAndConvert({ name: 'rex' }, 'name');

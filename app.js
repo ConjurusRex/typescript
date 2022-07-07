@@ -24,3 +24,7 @@ function countAndDescribe(element) {
 console.log(countAndDescribe('hello world')); // returns: Array [ "hello world", "got 11 elements" ]
 console.log(countAndDescribe(['yam', 'fish', 'broccoli'])); // returns: Array [ (3) […], "got 3 elements" ]
 console.log(countAndDescribe([])); // returns: Array [ [], "missing value" ]
+function extractAndConvert(obj, key) {
+    return 'Value: ' + obj[key];
+}
+extractAndConvert({ name: 'rex' }, 'name');
