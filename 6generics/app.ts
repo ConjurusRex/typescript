@@ -1,43 +1,43 @@
-interface Person {
-  name: string
-}
+class DataStorage<T extends string | number | boolean> {
+  private data: T[] = [];
 
-// constraints
-// union types, interfaces, or custom types are valid constraints as well -> constraining one generic type is also valid
-function merge<T extends Person, U extends object>(objA: T, objB: U) { 
-  return Object.assign(objA, objB);
-}
-
-//const obj = merge({ name: 'josh' }, 30); -> will throw an error when constraints are specified
-const obj = merge({ name: 'josh' }, { age: 31 });
-obj.age;
-obj.name;
-
-
-interface Lengthy {
-  length: number;
-}
-
-// generic function with interface constraint
-// return type is a tuple -> first ele is of type T, second ele is of type string
-// Lengthy tells TS to only care that the element argument has a length property
-function countAndDescribe<T extends Lengthy>(element: T): [T, string] {
-  let description = 'missing value';
-  if (element.length === 1) {
-    description = 'got 1 element';
-  } else if (element.length > 1) {
-    description = 'got ' + element.length + ' elements';
+  addItem(item: T) { // can use generic types in class methods -> addItem<T>
+    this.data.push(item);
   }
-  return [element, description];
+
+  removeItem(item: T) {
+    // if (this.data.indexOf(item) === -1) {
+    //   return;
+    // }
+    this.data.splice(this.data.indexOf(item), 1);
+  }
+
+  getItems() {
+    return [...this.data];
+  }
 }
 
-console.log(countAndDescribe('hello world')); // returns: Array [ "hello world", "got 11 elements" ]
-console.log(countAndDescribe(['yam', 'fish', 'broccoli'])); // returns: Array [ (3) […], "got 3 elements" ]
-console.log(countAndDescribe([])); // returns: Array [ [], "missing value" ]
+// specifies generic type -> <string>
+const textStorage = new DataStorage<string>();
+textStorage.addItem('conjurus_rex');
+textStorage.addItem('arowscal');
+textStorage.addItem('faerwald');
+textStorage.removeItem('arowscal');
+console.log(textStorage.getItems());
 
+const numStorage = new DataStorage<number>(); // also valid -> <number | string>
+numStorage.addItem(2);
+numStorage.addItem(1);
+numStorage.addItem(3);
+numStorage.removeItem(3);
+console.log(numStorage.getItems());
 
-function extractAndConvert<T extends object, U extends keyof T>(obj: T, key: U) {
-  return 'Value: ' + obj[key];
-}
+// const objStorage = new DataStorage<object>();
+// const rexDataObj = {name: 'rex'};
+// objStorage.addItem(rexDataObj);
+// objStorage.addItem({name: 'conjurus'});
+// objStorage.addItem({name: 'faerwald'});
+// objStorage.removeItem(rexDataObj); // correct way to remove an object by reference
+// // objStorage.removeItem({name: 'conjurus'}); this will not work -> objects are reference types and indexOf returns -1 and removes the last index
+// console.log(objStorage.getItems());
 
-extractAndConvert({ name: 'rex' }, 'name');

@@ -1,30 +1,39 @@
 "use strict";
-// constraints
-// union types, interfaces, or custom types are valid constraints as well -> constraining one generic type is also valid
-function merge(objA, objB) {
-    return Object.assign(objA, objB);
-}
-//const obj = merge({ name: 'josh' }, 30); -> will throw an error when constraints are specified
-const obj = merge({ name: 'josh' }, { age: 31 });
-obj.age;
-obj.name;
-// generic function with interface constraint
-// return type is a tuple -> first ele is of type T, second ele is of type string
-// Lengthy tells TS to only care that the element argument has a length property
-function countAndDescribe(element) {
-    let description = 'missing value';
-    if (element.length === 1) {
-        description = 'got 1 element';
+class DataStorage {
+    constructor() {
+        this.data = [];
     }
-    else if (element.length > 1) {
-        description = 'got ' + element.length + ' elements';
+    addItem(item) {
+        this.data.push(item);
     }
-    return [element, description];
+    removeItem(item) {
+        // if (this.data.indexOf(item) === -1) {
+        //   return;
+        // }
+        this.data.splice(this.data.indexOf(item), 1);
+    }
+    getItems() {
+        return [...this.data];
+    }
 }
-console.log(countAndDescribe('hello world')); // returns: Array [ "hello world", "got 11 elements" ]
-console.log(countAndDescribe(['yam', 'fish', 'broccoli'])); // returns: Array [ (3) […], "got 3 elements" ]
-console.log(countAndDescribe([])); // returns: Array [ [], "missing value" ]
-function extractAndConvert(obj, key) {
-    return 'Value: ' + obj[key];
-}
-extractAndConvert({ name: 'rex' }, 'name');
+// specifies generic type -> <string>
+const textStorage = new DataStorage();
+textStorage.addItem('conjurus_rex');
+textStorage.addItem('arowscal');
+textStorage.addItem('faerwald');
+textStorage.removeItem('arowscal');
+console.log(textStorage.getItems());
+const numStorage = new DataStorage(); // also valid -> <number | string>
+numStorage.addItem(2);
+numStorage.addItem(1);
+numStorage.addItem(3);
+numStorage.removeItem(3);
+console.log(numStorage.getItems());
+// const objStorage = new DataStorage<object>();
+// const rexDataObj = {name: 'rex'};
+// objStorage.addItem(rexDataObj);
+// objStorage.addItem({name: 'conjurus'});
+// objStorage.addItem({name: 'faerwald'});
+// objStorage.removeItem(rexDataObj); // correct way to remove an object by reference
+// // objStorage.removeItem({name: 'conjurus'}); this will not work -> objects are reference types and indexOf returns -1 and removes the last index
+// console.log(objStorage.getItems());
