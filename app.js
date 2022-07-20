@@ -1,39 +1,13 @@
 "use strict";
-class DataStorage {
-    constructor() {
-        this.data = [];
-    }
-    addItem(item) {
-        this.data.push(item);
-    }
-    removeItem(item) {
-        // if (this.data.indexOf(item) === -1) {
-        //   return;
-        // }
-        this.data.splice(this.data.indexOf(item), 1);
-    }
-    getItems() {
-        return [...this.data];
-    }
+function createGoal(title, desc) {
+    // generic util type: Partial -> sets all props of Goal to optional
+    let courseGoal = {};
+    courseGoal.title = 'my goal';
+    courseGoal.desc = 'achieving my goal';
+    // Partial<Goal> != Goal -> must typecast
+    return courseGoal;
 }
-// specifies generic type -> <string>
-const textStorage = new DataStorage();
-textStorage.addItem('conjurus_rex');
-textStorage.addItem('arowscal');
-textStorage.addItem('faerwald');
-textStorage.removeItem('arowscal');
-console.log(textStorage.getItems());
-const numStorage = new DataStorage(); // also valid -> <number | string>
-numStorage.addItem(2);
-numStorage.addItem(1);
-numStorage.addItem(3);
-numStorage.removeItem(3);
-console.log(numStorage.getItems());
-// const objStorage = new DataStorage<object>();
-// const rexDataObj = {name: 'rex'};
-// objStorage.addItem(rexDataObj);
-// objStorage.addItem({name: 'conjurus'});
-// objStorage.addItem({name: 'faerwald'});
-// objStorage.removeItem(rexDataObj); // correct way to remove an object by reference
-// // objStorage.removeItem({name: 'conjurus'}); this will not work -> objects are reference types and indexOf returns -1 and removes the last index
-// console.log(objStorage.getItems());
+// generic util type: Readonly -> does not allow mutation
+const names = ['rex', 'conjurus'];
+// names.push() 
+// names.pop()
