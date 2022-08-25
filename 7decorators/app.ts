@@ -1,11 +1,26 @@
-// class decorators require an arg which passes the constructor function of the class
-// decorators execute when the class is defined
-function Logger(constructor: Function) {
-  console.log('Logger');
-  console.log(constructor);
+// decorator factory function - allows passing values to decorator function
+function Logger(loggerMsg: string) {
+  return function(constructor: Function) {
+    console.log(loggerMsg);
+    console.log(constructor);
+  } 
 }
 
-@Logger
+function WithTemplate(template: string, hookId: string) {
+  // can replace constructor with _ to tell typescript to ignore 'value is never read'
+  return function(constructor: any) {
+    const el = document.getElementById(hookId);
+    const person = new constructor();
+    if (el) {
+       el.innerHTML = template;
+       // ! -> we are sure to have an h1 el
+       el.querySelector('h1')!.textContent = person.name;
+    }
+  }
+}
+
+// @Logger('this is a Logger message')
+@WithTemplate('<h1>WithTemplate: <i>a decorator factory function</i></h1>', 'app')
 class Person {
   name = 'rex'
   constructor() {
