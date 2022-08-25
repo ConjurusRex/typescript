@@ -1,6 +1,8 @@
-function Logger(target: Function) {
-  console.log('logging');
-  console.log(target);
+// class decorators require an arg which passes the constructor function of the class
+// decorators execute when the class is defined
+function Logger(constructor: Function) {
+  console.log('Logger');
+  console.log(constructor);
 }
 
 @Logger
